@@ -1,0 +1,17 @@
+# Environment secrets
+.env
+.env.*
+!.env.example
+backend/.env
+backend/.env.*
+!backend/.env.example
+
+# Dependencies
+node_modules/
+backend/node_modules/
+
+# Logs and generated files
+*.log
+coverage/
+dist/
+build/
