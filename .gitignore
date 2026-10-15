@@ -1,4 +1,9 @@
+<<<<<<< HEAD
 # Environment secrets
+=======
+
+# Environment variables and secrets
+>>>>>>> origin/main
 .env
 .env.*
 !.env.example
@@ -14,4 +19,12 @@ backend/node_modules/
 *.log
 coverage/
 dist/
+<<<<<<< HEAD
 build/
+=======
+build/
+
+# Operating system files
+.DS_Store
+Thumbs.db
+>>>>>>> origin/main
