@@ -14,9 +14,10 @@ const cors = require('cors');
 const pool = require('./config/db');
 
 // 4. Import route modules
-const doctorsRouter      = require('./routes/doctors');
+const doctorsRouter = require('./routes/doctors');
 const availabilityRouter = require('./routes/availability');
 const appointmentsRouter = require('./routes/appointments');
+const retellRouter = require('./routes/retell');
 
 // 4. Initialize the Express application
 const app = express();
@@ -125,6 +126,9 @@ app.use('/api/availability', availabilityRouter);
 
 // Appointment booking under /api/appointments
 app.use('/api/appointments', appointmentsRouter);
+
+// Retell tools under /api/retell/tools
+app.use('/api/retell/tools', retellRouter);
 
 // ==========================================
 // Start Server
