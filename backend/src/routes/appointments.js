@@ -4,8 +4,8 @@
 // ==========================================
 
 const express = require('express');
-const router  = express.Router();
-const pool    = require('../config/db');
+const router = express.Router();
+const pool = require('../config/db');
 
 // ==========================================
 // Input Validation Helpers (exported for unit tests)
@@ -120,7 +120,7 @@ router.post('/', async (req, res) => {
 
   // 1e. startTime and endTime: must be valid ISO date strings
   const startDate = parseIsoDate(startTime);
-  const endDate   = parseIsoDate(endTime);
+  const endDate = parseIsoDate(endTime);
 
   if (!startDate) {
     return res.status(400).json({
@@ -249,20 +249,29 @@ router.post('/', async (req, res) => {
       status: 'ok',
       message: 'Appointment booked successfully',
       appointment: {
-        id:          appointment.id,
-        doctorId:    appointment.doctor_id,
-        doctorName:  doctor.name,
+        id: appointment.id,
+        doctorId: appointment.doctor_id,
+        doctorName: doctor.name,
         patientName: appointment.patient_name,
-        startTime:   appointment.start_time,
-        endTime:     appointment.end_time,
-        status:      appointment.status,
-        createdAt:   appointment.created_at
+        startTime: appointment.start_time,
+        endTime: appointment.end_time,
+        status: appointment.status,
+        createdAt: appointment.created_at
       }
     });
 
   } catch (error) {
     // Always roll back if anything unexpected throws
     try { await client.query('ROLLBACK'); } catch (_) { /* ignore rollback error */ }
+    // Handle overlapping appointment conflicts from PostgreSQL
+    if (error.code === '23P01' || error.code === '23505') {
+      responded = true;
+      return res.status(409).json({
+        status: 'error',
+        message: 'This appointment slot is no longer available. Please choose another slot.',
+        code: 'BOOKING_CONFLICT'
+      });
+    }
 
     // Log only the error code — never credentials or patient data
     console.error('[POST /api/appointments] DB error:', error.code || error.name || 'UNKNOWN');
@@ -284,7 +293,7 @@ router.post('/', async (req, res) => {
 
 // Export route and helpers so tests can import them directly
 module.exports = router;
-module.exports.isNonEmptyString     = isNonEmptyString;
-module.exports.isValidPhone         = isValidPhone;
-module.exports.parseIsoDate         = parseIsoDate;
-module.exports.isValidSlotDuration  = isValidSlotDuration;
+module.exports.isNonEmptyString = isNonEmptyString;
+module.exports.isValidPhone = isValidPhone;
+module.exports.parseIsoDate = parseIsoDate;
+module.exports.isValidSlotDuration = isValidSlotDuration;
