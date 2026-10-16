@@ -1,0 +1,58 @@
+[
+    {
+        "id": "cardiologist_lookup",
+        "user_message": "I need to book an appointment with a cardiologist.",
+        "expected_tool_calls": [
+            "get_doctors"
+        ],
+        "assertions": [
+            "Selects a doctor whose specialty matches cardiology",
+            "Uses the doctor ID returned by get_doctors",
+            "Does not invent a doctor"
+        ]
+    },
+    {
+        "id": "unavailable_date",
+        "user_message": "Is Dr. Priya Sharma available on the requested date?",
+        "expected_tool_calls": [
+            "check_availability"
+        ],
+        "assertions": [
+            "Uses the requested date and correct doctor ID",
+            "Reports the actual API result",
+            "Does not invent available slots"
+        ]
+    },
+    {
+        "id": "unconfirmed_booking",
+        "user_message": "Book that appointment. I have not confirmed the details yet.",
+        "forbidden_tool_calls": [
+            "book_appointment"
+        ],
+        "assertions": [
+            "Requests explicit confirmation before booking",
+            "Does not claim the appointment was booked"
+        ]
+    },
+    {
+        "id": "booking_conflict",
+        "user_message": "Book a time that is already occupied.",
+        "expected_tool_calls": [
+            "book_appointment"
+        ],
+        "assertions": [
+            "Handles the conflict response",
+            "Does not claim the conflicting booking succeeded",
+            "Offers another available slot"
+        ]
+    },
+    {
+        "id": "backend_error",
+        "user_message": "Please check availability while the backend is unavailable.",
+        "assertions": [
+            "Explains that availability could not be verified",
+            "Does not invent slots",
+            "Does not claim a booking succeeded"
+        ]
+    }
+]

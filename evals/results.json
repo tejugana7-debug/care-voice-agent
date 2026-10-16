@@ -1,0 +1,35 @@
+{
+    "evaluation_type": "Backend API smoke tests",
+    "date": "2026-10-16",
+    "summary": {
+        "passed": 5,
+        "failed": 0,
+        "total": 5
+    },
+    "results": [
+        {
+            "test": "Doctor lookup succeeds",
+            "status": "PASS"
+        },
+        {
+            "test": "Availability returns slots",
+            "status": "PASS"
+        },
+        {
+            "test": "Invalid date is rejected",
+            "status": "PASS"
+        },
+        {
+            "test": "Missing doctor ID is rejected",
+            "status": "PASS"
+        },
+        {
+            "test": "Unconfirmed booking is rejected",
+            "status": "PASS"
+        }
+    ],
+    "limitations": [
+        "These tests exercise the REST API, not scripted voice-agent conversations.",
+        "Tool-call assertions, an LLM judge, and a concurrent double-booking test remain to be implemented."
+    ]
+}
